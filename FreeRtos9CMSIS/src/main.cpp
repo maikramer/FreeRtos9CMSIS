@@ -15,6 +15,7 @@
 #include "queue.h"
 
 #include <Led.h>
+#include <Serial.h>
 #include <debug.h>
 // ----------------------------------------------------------------------------
 //
@@ -33,6 +34,7 @@
 // the end of this function, used to pop the compiler diagnostics status.
 
 Led led(GPIOC, GPIO_Pin_13, State::LOW);
+Serial serial();
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -47,10 +49,21 @@ static void LEDBlinkTask(void *pvParameters) {
 	}
 }
 
+static void escreveSerialTask(void *pvParameters){
+	vTaskDelay(5000 / portTICK_RATE_MS);
+	serial.print("AT");
+}
+
+static void leSerialTask(void *pvParameters){
+
+}
+
 int main(void) {
 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
 	led.init();
 	xTaskCreate(LEDBlinkTask, "Blink", 256, NULL, 2, NULL);
+	xTaskCreate(escreveSerialTask, "Escreve Serial", 256, NULL, 2, NULL);
+	xTaskCreate(leSerialTask, "Le Serial", 256, NULL, 2, NULL);
 	vTaskStartScheduler();
 	while (1)
 		;

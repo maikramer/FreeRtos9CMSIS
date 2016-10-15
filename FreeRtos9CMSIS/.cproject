@@ -313,11 +313,6 @@
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.printsize.1996188047" name="Cross ARM GNU Print Size" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.printsize.727481856"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1477809526.1797455514" name="port.c" rcbsApplicability="disable" resourcePath="FreeRTOS9/portable/port.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1345543237.712567568">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1345543237.712567568" name="Cross ARM C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1345543237">
-							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1962013480" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
-						</tool>
-					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS9"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
