@@ -1,10 +1,10 @@
 //=================================================================================//
 //	Arquivo : Serial.cpp
-//	Projeto : IntTeste
+//	Projeto : FreeRTOS9CMSIS
 //	Autor : Maikeu Locatelli
 //	Copyright : Locatelli Engenharia
 //
-//	Descricão: 
+//	Descricão: Objeto para manipulação de Serial no STM32F103
 //=================================================================================//
 //	This file is part of IntTeste
 //	IntTeste is free software: you can redistribute it and/or modify
@@ -23,7 +23,12 @@
 //==================================================================================//
 //	Includes
 //==================================================================================//
+
 #include <Serial.h>
+
+//==================================================================================//
+//	Definição dos Métodos
+//==================================================================================//
 
 Serial::Serial() {
 	init();

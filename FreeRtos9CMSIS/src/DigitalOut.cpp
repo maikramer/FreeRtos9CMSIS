@@ -1,10 +1,10 @@
 //=================================================================================//
 //	Arquivo : DigitalOut.cpp
-//	Projeto : IntTeste
+//	Projeto : FreeRtos9CMSIS
 //	Autor : Maikeu Locatelli
 //	Copyright : Locatelli Engenharia
 //
-//	Descricão: 
+//	Descricão: Objeto para saídas GPIO do STM32F103
 //=================================================================================//
 //	This file is part of IntTeste
 //	IntTeste is free software: you can redistribute it and/or modify
@@ -23,8 +23,13 @@
 //==================================================================================//
 //	Includes
 //==================================================================================//
+
 #include <DigitalOut.h>
 #include <debug.h>
+
+//==================================================================================//
+//	Definição dos Métodos
+//==================================================================================//
 
 DigitalOut::DigitalOut(GPIO_TypeDef* port, uint16_t pin) :
 		_port(port), _pin(pin), _init(0) {

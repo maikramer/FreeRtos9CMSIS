@@ -1,6 +1,6 @@
 //=================================================================================//
 //	Arquivo : Led.cpp
-//	Projeto : IntTeste
+//	Projeto : FreeRtos9CMSIS
 //	Autor : Maikeu Locatelli
 //	Copyright : Locatelli Engenharia
 //
@@ -23,8 +23,13 @@
 //==================================================================================//
 //	Includes
 //==================================================================================//
+
 #include <Led.h>
 #include <debug.h>
+
+//==================================================================================//
+//	Definição dos Métodos
+//==================================================================================//
 
 Led::Led(GPIO_TypeDef* port, uint16_t pin, State activeState) :
 		DigitalOut(port, pin), _activeState(activeState) {

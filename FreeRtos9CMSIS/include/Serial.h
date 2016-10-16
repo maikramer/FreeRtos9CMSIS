@@ -1,10 +1,10 @@
 //=================================================================================//
 //	Arquivo : Serial.h
-//	Projeto : IntTeste
+//	Projeto : FreeRTOS9CMSIS
 //	Autor : Maikeu Locatelli
 //	Copyright : Locatelli Engenharia
 //
-//	Descricão: 
+//	Descricão: Objeto para manipulação de Serial no STM32F103
 //=================================================================================//
 //	This file is part of IntTeste
 //	IntTeste is free software: you can redistribute it and/or modify
@@ -27,9 +27,19 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdarg.h>
+
+//==================================================================================//
+//	Includes STM32
+//==================================================================================//
+
 #include <stm32f10x_gpio.h>
 #include <stm32f10x_rcc.h>
 #include <stm32f10x_usart.h>
+
+//==================================================================================//
+//	Includes Locais
+//==================================================================================//
+
 #include <debug.h>
 #include <string>
 

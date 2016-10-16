@@ -1,40 +1,58 @@
+//=================================================================================//
+//	Arquivo : Main.cpp
+//	Projeto : FreeRtos9CMSIS
+//	Autor : Maikeu Locatelli
+//	Copyright : Locatelli Engenharia
 //
-// This file is part of the GNU ARM Eclipse distribution.
-// Copyright (c) 2014 Liviu Ionescu.
+//	Descricão: Configuração basica do FreeRTOS 9 com CMSIS no STM32F103
+//=================================================================================//
+//	This file is part of IntTeste
+//	IntTeste is free software: you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation, either version 3 of the License, or
+//	(at your option) any later version.
 //
-
-// ----------------------------------------------------------------------------
+//	This program is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//
+//	You should have received a copy of the GNU General Public License
+//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+//==================================================================================//
+//	Includes
+//==================================================================================//
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "diag/Trace.h"
 
-/* Scheduler includes. */
+//==================================================================================//
+//	Includes FreeRTOS
+//==================================================================================//
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 
+//==================================================================================//
+//	Includes Locais
+//==================================================================================//
+
 #include <Led.h>
 #include <Serial.h>
 #include <debug.h>
-// ----------------------------------------------------------------------------
-//
-// Standalone STM32F1 empty sample (trace via DEBUG).
-//
-// Trace support is enabled by adding the TRACE macro definition.
-// By default the trace messages are forwarded to the DEBUG output,
-// but can be rerouted to any device or completely suppressed, by
-// changing the definitions required in system/src/diag/trace_impl.c
-// (currently OS_USE_TRACE_ITM, OS_USE_TRACE_SEMIHOSTING_DEBUG/_STDOUT).
-//
 
-// ----- main() ---------------------------------------------------------------
-
-// Sample pragmas to cope with warnings. Please note the related line at
-// the end of this function, used to pop the compiler diagnostics status.
+//==================================================================================//
+//	Objetos
+//==================================================================================//
 
 Led led(GPIOC, GPIO_Pin_13, State::LOW);
 Serial serial;
+
+//==================================================================================//
+//	Funções
+//==================================================================================//
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -79,6 +97,7 @@ int main(void) {
 }
 
 #pragma GCC diagnostic pop
+
 extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask,
 		signed char *pcTaskName) {
 	/* This function will get called if a task overflows its stack.   If the

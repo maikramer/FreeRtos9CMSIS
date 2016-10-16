@@ -1,10 +1,10 @@
 //=================================================================================//
 //	Arquivo : debug.h
-//	Projeto : IntTeste
+//	Projeto : FreeRTOS9CMSIS
 //	Autor : Maikeu Locatelli
 //	Copyright : Locatelli Engenharia
 //
-//	Descricão: 
+//	Descricão: Manipulação de erros
 //=================================================================================//
 //	This file is part of IntTeste
 //	IntTeste is free software: you can redistribute it and/or modify
@@ -25,6 +25,7 @@
 //==================================================================================//
 #include "diag/Trace.h"
 #include <string>
+
 #ifndef INCLUDE_DEBUG_H_
 #define INCLUDE_DEBUG_H_
 #ifdef DEBUG
