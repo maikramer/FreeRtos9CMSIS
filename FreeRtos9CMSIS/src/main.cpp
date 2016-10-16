@@ -34,7 +34,7 @@
 // the end of this function, used to pop the compiler diagnostics status.
 
 Led led(GPIOC, GPIO_Pin_13, State::LOW);
-Serial serial();
+Serial serial;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -49,26 +49,46 @@ static void LEDBlinkTask(void *pvParameters) {
 	}
 }
 
-static void escreveSerialTask(void *pvParameters){
-	vTaskDelay(5000 / portTICK_RATE_MS);
-	serial.print("AT");
+static void escreveSerialTask(void *pvParameters) {
+	while (1) {
+		vTaskDelay(5000 / portTICK_RATE_MS);
+		serial.print("AT\r\n");
+	}
 }
 
-static void leSerialTask(void *pvParameters){
-
+static void leSerialTask(void *pvParameters) {
+	while (1) {
+		while (!serial.available())
+			;
+		logMessage(serial.read());
+	}
 }
 
 int main(void) {
-	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
+	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);
 	led.init();
 	xTaskCreate(LEDBlinkTask, "Blink", 256, NULL, 2, NULL);
-	xTaskCreate(escreveSerialTask, "Escreve Serial", 256, NULL, 2, NULL);
-	xTaskCreate(leSerialTask, "Le Serial", 256, NULL, 2, NULL);
+	logMessage("Tarefa Blink Adcionada\n");
+	xTaskCreate(escreveSerialTask, "EscreveSerial", 1024, NULL, 2, NULL);
+	logMessage("Tarefa Escreve Serial Adcionada\n");
+	xTaskCreate(leSerialTask, "LeSerial", 1024, NULL, 2, NULL);
+	logMessage("Tarefa Le Serial Adcionada\n");
 	vTaskStartScheduler();
 	while (1)
 		;
 }
 
 #pragma GCC diagnostic pop
+extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask,
+		signed char *pcTaskName) {
+	/* This function will get called if a task overflows its stack.   If the
+	 parameters are corrupt then inspect pxCurrentTCB to find which was the
+	 offending task. */
+
+	trace_printf("Stack Overflow na tarefa %s", pcTaskName);
+
+	for (;;)
+		;
+}
 
 // ----------------------------------------------------------------------------
