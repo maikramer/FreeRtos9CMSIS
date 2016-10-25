@@ -64,10 +64,10 @@ void Led::clear() {
 }
 
 void Led::toggle() {
-	if (status() == Status::OFF) {
-		set();
-	} else
+	if ((bool)status()) {
 		clear();
+	} else
+		set();
 }
 
 Led::~Led() {

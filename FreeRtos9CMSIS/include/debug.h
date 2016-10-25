@@ -24,7 +24,7 @@
 //	Includes
 //==================================================================================//
 #include "diag/Trace.h"
-#include <string>
+//#include <string>
 
 #ifndef INCLUDE_DEBUG_H_
 #define INCLUDE_DEBUG_H_
@@ -34,10 +34,12 @@ inline void logMessage(const char *pMessage){
 	trace_printf("LOG : %s\n", pMessage);
 }
 
+#ifdef _GLIBCXX_STRING
 inline void logMessage(std::string sMessage){
 	const char * pMessage = sMessage.c_str();
 	trace_printf("LOG : %s\n", pMessage);
 }
+#endif
 
 inline void errorMessage(const char *pMessage){
 	trace_printf("ERROR : %s\n", pMessage);

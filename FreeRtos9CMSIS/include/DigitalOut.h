@@ -38,8 +38,8 @@
 #define DIGITALOUT_H_
 
 enum class State
-	: uint32_t {
-		LOW, HIGH
+	: bool {
+		LOW = false, HIGH = true
 };
 
 class DigitalOut {

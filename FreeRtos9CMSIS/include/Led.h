@@ -44,8 +44,8 @@
 #define LED_H_
 
 enum class Status
-	: uint32_t {
-		OFF, ON
+	: bool {
+		OFF = false, ON = true
 };
 
 class Led: public DigitalOut {

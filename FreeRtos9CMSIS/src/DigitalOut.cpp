@@ -52,7 +52,7 @@ void DigitalOut::init() {
 	RCC_APB2PeriphClockCmd(_clk, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = _pin;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
 	GPIO_Init(_port, &GPIO_InitStructure);
 	_init = 1;
 }

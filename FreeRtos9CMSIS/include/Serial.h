@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <string.h>
 
 //==================================================================================//
 //	Includes STM32
@@ -37,24 +38,50 @@
 #include <stm32f10x_usart.h>
 
 //==================================================================================//
+//	Includes FreeRTOS
+//==================================================================================//
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+
+//==================================================================================//
 //	Includes Locais
 //==================================================================================//
 
 #include <debug.h>
-#include <string>
+
+//==================================================================================//
+//	Definições de configuração
+//==================================================================================//
+
+// Numero de portas seriais sendo utilizadas
+#define serNUM_COM_PORTS				( 2 )
+
+// Máximo de caracteres que a QUEUE para Transmissão pode conter
+#define serTX_QUEUE_LEN					( 100 )
+
+// Máximo de caracteres que a QUEUE para Recepção pode conter
+#define serRX_QUEUE_LEN					( 100 )
+
+// Tempo por caracter que a função lSerialPutString() pode aguardar por espaço na QUEUE
+#define serPUT_STRING_CHAR_DELAY		( 5 / portTICK_PERIOD_MS )
 
 #ifndef SERIAL_H_
 #define SERIAL_H_
 
 class Serial {
 public:
-	Serial();
+	Serial(USART_TypeDef * xPort);
 	virtual ~Serial();
-	void init();
-	void print(const char * str);
-	void printf(const char *format, ...);
-	bool available(void);
-	std::string read(void);
+	BaseType_t init(unsigned long ulWantedBaud);
+	BaseType_t print(const char * str);
+	BaseType_t printf(const char *format, ...);
+	BaseType_t gets(char * pcStr, const size_t maxLen);
+	BaseType_t getChar(char *pcRxedChar, TickType_t xBlockTime);
+	BaseType_t putChar(unsigned char cOutChar, TickType_t xBlockTime);
+private:
+	unsigned long _ulPort;
 };
 
 #endif /* SERIAL_H_ */
