@@ -42,7 +42,9 @@
 #include <Led.h>
 #include <Button.h>
 #include <Serial.h>
+#include <Timer.h>
 #include <debug.h>
+#include <Stepper.h>
 
 //==================================================================================//
 //	Objetos
@@ -54,6 +56,14 @@ Led led2(GPIOB, GPIO_Pin_15, State::HIGH);
 Button botao(GPIOB, GPIO_Pin_0);
 
 Serial serial(USART1);
+
+Timer timer1(TIM1);
+
+DigitalOut stepOut(GPIOB, GPIO_Pin_7);
+DigitalOut directionOut(GPIOB, GPIO_Pin_6);
+DigitalOut enableOut(GPIOB, GPIO_Pin_8);
+
+Stepper step1(stepOut, directionOut, enableOut, timer1);
 
 //==================================================================================//
 //	Funções
@@ -85,7 +95,7 @@ static void escreveSerialTask(void *pvParameters) {
 
 static void leSerialTask(void *pvParameters) {
 	char cStr[128];
-	size_t cStrLen = sizeof(cStr)/sizeof(char);
+	size_t cStrLen = sizeof(cStr) / sizeof(char);
 	while (1) {
 		serial.gets(cStr, cStrLen);
 		logMessage(cStr);
@@ -103,12 +113,21 @@ static void leBotao(void *pvParameters) {
 	}
 }
 
+static void enviaStepsTask(void *pvParameters) {
+	while (1) {
+		step1.step(500);
+		vTaskDelay(2000 / portTICK_RATE_MS);
+		step1.step(-300);
+		vTaskDelay(2000 / portTICK_RATE_MS);
+	}
+}
 int main(void) {
 	//Recomendação para FreeRTOS, 4 bits for pre-emption priority 0 bits for subpriority
 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4);
 	//Inicializa os Leds
 	led.init();
 	led2.init();
+	step1.init();
 	//Inicializa serial
 	serial.init(115200);
 	//Inicializa o botao
@@ -143,6 +162,15 @@ int main(void) {
 	} else {
 		logMessage("Tarefa LeBotao Adcionada\n");
 	}
+
+	if (xTaskCreate(enviaStepsTask, "EnviaSteps", 256, NULL, 3,
+	NULL) == errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY) {
+		errorMessage(
+				"Nao foi possivel alocar a memoria necessaria para EnviaSteps");
+	} else {
+		logMessage("Tarefa EnviaSteps Adcionada\n");
+	}
+
 	vTaskStartScheduler();
 	errorMessage("Nao foi possivel alocar memoria para a tarefa Idle");
 	while (1)

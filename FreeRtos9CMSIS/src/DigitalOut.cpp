@@ -39,38 +39,39 @@ DigitalOut::DigitalOut(GPIO_TypeDef* port, uint16_t pin) :
 		_clk = RCC_APB2Periph_GPIOB;
 	else if (port == GPIOC)
 		_clk = RCC_APB2Periph_GPIOC;
-	else _clk = 0;
+	else
+		_clk = 0;
 }
 
 DigitalOut::~DigitalOut() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void DigitalOut::init() {
-	GPIO_InitTypeDef GPIO_InitStructure;
-	// Habilita o Clock
-	RCC_APB2PeriphClockCmd(_clk, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = _pin;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-	GPIO_Init(_port, &GPIO_InitStructure);
-	_init = 1;
+	if (_init == 0) {
+		GPIO_InitTypeDef GPIO_InitStructure;
+		// Habilita o Clock
+		RCC_APB2PeriphClockCmd(_clk, ENABLE);
+		GPIO_InitStructure.GPIO_Pin = _pin;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+		GPIO_Init(_port, &GPIO_InitStructure);
+		_init = 1;
+	}
 }
 
-void DigitalOut::setOutput(State state){
-	if (state == State::HIGH){
+void DigitalOut::setOutput(State state) {
+	if ((bool) state) {
 		GPIO_SetBits(_port, _pin);
-	}
-	else {
+	} else {
 		GPIO_ResetBits(_port, _pin);
 	}
 }
 
-State DigitalOut::getOutput(){
-	if (GPIO_ReadOutputDataBit(_port, _pin) == Bit_SET){
+State DigitalOut::getOutput() {
+	if (GPIO_ReadOutputDataBit(_port, _pin) == Bit_SET) {
 		return State::HIGH;
-	}
-	else {
+	} else {
 		return State::LOW;
 	}
 
