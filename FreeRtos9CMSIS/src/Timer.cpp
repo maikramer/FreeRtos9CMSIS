@@ -78,13 +78,13 @@ void Timer::configIT(uint16_t periodOverflow, pFunction func) {
 		//Seta a função a ser executada dentro da ISR
 		if (*execTimer1 == nullptr) {
 			*execTimer1 = func;
-			(*execTimer1)++;
+			execTimer1++;
 		}
 	} else if (_timer == TIM2) {
 		//Seta a função a ser executada dentro da ISR
 		if (*execTimer2 == nullptr) {
 			*execTimer2 = func;
-			(*execTimer2)++;
+			execTimer2++;
 		}
 	}
 	TIM_ClearITPendingBit(_timer, TIM_IT_Update);
