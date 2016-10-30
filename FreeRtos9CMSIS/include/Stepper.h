@@ -50,24 +50,30 @@
 
 #include <debug.h>
 #include <DigitalOut.h>
-#include <Timer.h>
 
 #ifndef STEPPER_H_
 #define STEPPER_H_
 
+enum class Speed
+	: uint8_t {
+		SLOWEST = 20,
+		SLOW = 10,
+		MEDIUM = 5,
+		FAST = 2,
+		FASTEST = 1
+};
+
 class Stepper {
 public:
-	Stepper(DigitalOut& step, DigitalOut& direction, DigitalOut& enableOut,
-			Timer& timer);
+	Stepper(DigitalOut& step, DigitalOut& direction, DigitalOut& enableOut);
 	virtual ~Stepper();
 	void init();
 	void update();
-	void step(long ulSteps);
+	void step(long ulSteps, Speed speed = Speed::MEDIUM);
 private:
 	DigitalOut& _stepOut;
 	DigitalOut& _directionOut;
 	DigitalOut& _enableOut;
-	Timer& _timer;
 	long long _totalSteps;
 };
 

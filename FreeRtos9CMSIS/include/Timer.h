@@ -50,10 +50,16 @@
 
 #include <debug.h>
 
-#define MAX_FUNCTIONS 5
-
 #ifndef TIMER_H_
 #define TIMER_H_
+
+#define MAX_FUNCTIONS 1
+
+typedef struct {
+	uint32_t clk;
+	GPIO_TypeDef* port;
+	uint16_t pin;
+}OC_t;
 
 typedef void (*pFunction)();
 
@@ -64,6 +70,7 @@ public:
 	void init();
 	void setPeriod(uint16_t periodOverflow);
 	void configIT(uint16_t periodOverflow, pFunction func);
+	void setPWM(uint16_t channel, uint32_t frequency, uint8_t dutyCycle);
 private:
 	TIM_TypeDef * _timer;
 	IRQn _timerIRQn;

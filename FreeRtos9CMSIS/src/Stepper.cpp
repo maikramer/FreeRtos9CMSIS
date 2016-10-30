@@ -25,10 +25,8 @@
 //==================================================================================//
 #include <Stepper.h>
 
-Stepper::Stepper(DigitalOut& step, DigitalOut& direction, DigitalOut& enableOut,
-		Timer& timer) :
-		_stepOut(step), _directionOut(direction), _enableOut(enableOut), _timer(
-				timer), _totalSteps(0) {
+Stepper::Stepper(DigitalOut& step, DigitalOut& direction, DigitalOut& enableOut) :
+		_stepOut(step), _directionOut(direction), _enableOut(enableOut), _totalSteps(0) {
 
 }
 
@@ -40,14 +38,13 @@ void Stepper::init() {
 	_stepOut.init();
 	_directionOut.init();
 	_enableOut.init();
-	_timer.init();
 }
 
 void Stepper::update() {
 
 }
 
-void Stepper::step(long ulSteps) {
+void Stepper::step(long ulSteps, Speed speed) {
 	_enableOut.setOutput(State::LOW);
 	while (ulSteps != 0) {
 		if (ulSteps > 0) {
@@ -60,9 +57,9 @@ void Stepper::step(long ulSteps) {
 			_directionOut.setOutput(State::LOW);
 		}
 		_stepOut.setOutput(State::HIGH);
-		vTaskDelay(5 / portTICK_RATE_MS);
+		vTaskDelay((uint8_t) speed / portTICK_RATE_MS);
 		_stepOut.setOutput(State::LOW);
-		vTaskDelay(5 / portTICK_RATE_MS);
+		vTaskDelay((uint8_t) speed / portTICK_RATE_MS);
 	}
 	_enableOut.setOutput(State::HIGH);
 }

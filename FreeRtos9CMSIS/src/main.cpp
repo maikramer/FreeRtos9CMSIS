@@ -63,7 +63,7 @@ DigitalOut stepOut(GPIOB, GPIO_Pin_7);
 DigitalOut directionOut(GPIOB, GPIO_Pin_6);
 DigitalOut enableOut(GPIOB, GPIO_Pin_8);
 
-Stepper step1(stepOut, directionOut, enableOut, timer1);
+Stepper step1(stepOut, directionOut, enableOut);
 
 //==================================================================================//
 //	Funções
@@ -115,9 +115,9 @@ static void leBotao(void *pvParameters) {
 
 static void enviaStepsTask(void *pvParameters) {
 	while (1) {
-		step1.step(500);
+		step1.step(1000, Speed::FASTEST);
 		vTaskDelay(2000 / portTICK_RATE_MS);
-		step1.step(-300);
+		step1.step(-200, Speed::SLOWEST);
 		vTaskDelay(2000 / portTICK_RATE_MS);
 	}
 }

@@ -24,6 +24,7 @@
 //	Includes
 //==================================================================================//
 #include "diag/Trace.h"
+#include <stdlib.h>
 //#include <string>
 
 #ifndef INCLUDE_DEBUG_H_
@@ -43,6 +44,8 @@ inline void logMessage(std::string sMessage){
 
 inline void errorMessage(const char *pMessage){
 	trace_printf("ERROR : %s\n", pMessage);
+	trace_printf("Arquivo : %s Linha : \n ", __FILE__, __LINE__);
+	abort ();
 }
 #else
 #define logMessage(X) (0)
