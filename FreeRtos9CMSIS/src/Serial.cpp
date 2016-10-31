@@ -200,14 +200,16 @@ BaseType_t Serial::printf(const char *format, ...) {
 BaseType_t Serial::gets(char * pcStr, const size_t maxLen) {
 	BaseType_t xReturn = pdFAIL;
 	unsigned long ulCount = 0;
-	getChar(pcStr, portMAX_DELAY);
+	if (this->getChar(pcStr, portMAX_DELAY) == pdFAIL) {
+		return xReturn;
+	}
 	for (;;) {
 		pcStr++;
 		if ((++ulCount) == (maxLen - 1)) {
 			*pcStr = '\0';
 			xReturn = pdFAIL;
 		}
-		if (getChar(pcStr, 5 / portTICK_RATE_MS)) {
+		if (this->getChar(pcStr, 5 / portTICK_RATE_MS)) {
 			continue;
 		} else {
 			*pcStr = '\0';

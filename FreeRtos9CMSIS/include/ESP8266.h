@@ -57,8 +57,10 @@ public:
 	BaseType_t begin(void);
 	BaseType_t isConnected();
 	BaseType_t connect();
+	BaseType_t cmd(const char * command, const char *logMsg, unsigned char retries);
+	BaseType_t startTelnet(void);
+	BaseType_t sendTelnet(const char * pcStr);
 private:
-	bool _waitForOk(void);
 	Serial& _serial;
 	char _cRxBuffer[MAX_ESP_BUFFER];
 };

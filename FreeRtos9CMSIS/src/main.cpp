@@ -90,8 +90,10 @@ static void LEDBlinkTask(void *pvParameters) {
 static void escreveSerialTask(void *pvParameters) {
 	wifi.begin();
 	wifi.connect();
+	wifi.startTelnet();
 	while (1) {
-		vTaskDelay(6000 / portTICK_RATE_MS);
+		vTaskDelay(2000 / portTICK_RATE_MS);
+		wifi.sendTelnet("Ola Telnet\n");
 		//serial.print("AT\r\n");
 	}
 	//Recomendação, se conseguir quebrar o loop, deleta a tarefa
