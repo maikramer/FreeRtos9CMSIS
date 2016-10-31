@@ -126,8 +126,8 @@ BaseType_t Serial::init(unsigned long ulWantedBaud) {
 			xRxedChars[1] = xQueueCreate(serRX_QUEUE_LEN, sizeof(char));
 
 			/* Enable COM0 clock - the ST libraries start numbering from 1. */
-			RCC_APB2PeriphClockCmd(
-			RCC_APB1Periph_USART2 | RCC_APB2Periph_GPIOA, ENABLE);
+			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
 
 			/* Configure USART2 Rx (PA3) as input floating */
 			GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
@@ -207,7 +207,7 @@ BaseType_t Serial::gets(char * pcStr, const size_t maxLen) {
 			*pcStr = '\0';
 			xReturn = pdFAIL;
 		}
-		if (getChar(pcStr, 10 / portTICK_RATE_MS)) {
+		if (getChar(pcStr, 5 / portTICK_RATE_MS)) {
 			continue;
 		} else {
 			*pcStr = '\0';

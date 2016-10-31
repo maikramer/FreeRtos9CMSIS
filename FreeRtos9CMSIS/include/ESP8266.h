@@ -1,5 +1,5 @@
 //=================================================================================//
-//	Arquivo : Timer.h
+//	Arquivo : ESP8266.h
 //	Projeto : FreeRtos9CMSIS
 //	Autor : Maikeu Locatelli
 //	Copyright : Locatelli Engenharia
@@ -27,14 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-
-//==================================================================================//
-//	Includes STM32
-//==================================================================================//
-
-#include <stm32f10x_gpio.h>
-#include <stm32f10x_rcc.h>
-#include <stm32f10x_tim.h>
+#include <string.h>
 
 //==================================================================================//
 //	Includes FreeRTOS
@@ -49,32 +42,25 @@
 //==================================================================================//
 
 #include <debug.h>
+#include <Serial.h>
 
-#ifndef TIMER_H_
-#define TIMER_H_
 
-#define MAX_FUNCTIONS 1
+#ifndef ESP8266_H_
+#define ESP8266_H_
 
-typedef struct {
-	uint32_t clk;
-	GPIO_TypeDef* port;
-	uint16_t pin;
-}OC_t;
+#define MAX_ESP_BUFFER 	128
 
-typedef void (*pFunction)();
-
-class Timer {
+class ESP8266 {
 public:
-	Timer(TIM_TypeDef * timer);
-	virtual ~Timer();
-	void init();
-	void setPeriod(uint16_t periodOverflow);
-	void configIT(uint16_t periodOverflow, pFunction func);
-	void setPWM(uint16_t channel, uint32_t frequency, uint8_t dutyCycle);
+	ESP8266(Serial& serial);
+	virtual ~ESP8266();
+	BaseType_t begin(void);
+	BaseType_t isConnected();
+	BaseType_t connect();
 private:
-	TIM_TypeDef * _timer;
-	IRQn _timerIRQn;
-	bool _init;
+	bool _waitForOk(void);
+	Serial& _serial;
+	char _cRxBuffer[MAX_ESP_BUFFER];
 };
 
-#endif /* TIMER_H_ */
+#endif /* ESP8266_H_ */

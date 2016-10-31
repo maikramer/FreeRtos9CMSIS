@@ -45,18 +45,21 @@
 #include <Timer.h>
 #include <debug.h>
 #include <Stepper.h>
+#include <ESP8266.h>
 
 //==================================================================================//
 //	Objetos
 //==================================================================================//
 
 Led led(GPIOC, GPIO_Pin_13, State::LOW);
+
 Led led2(GPIOB, GPIO_Pin_15, State::HIGH);
 
 Button botao(GPIOB, GPIO_Pin_0);
 
-Serial serial(USART1);
+Serial serial1(USART1);
 
+ESP8266 wifi(serial1);
 Timer timer1(TIM1);
 
 DigitalOut stepOut(GPIOB, GPIO_Pin_7);
@@ -85,20 +88,22 @@ static void LEDBlinkTask(void *pvParameters) {
 }
 
 static void escreveSerialTask(void *pvParameters) {
+	wifi.begin();
+	wifi.connect();
 	while (1) {
 		vTaskDelay(6000 / portTICK_RATE_MS);
-		serial.print("AT+GMR\r\n");
+		//serial.print("AT\r\n");
 	}
 	//Recomendação, se conseguir quebrar o loop, deleta a tarefa
 	vTaskDelete(NULL);
 }
 
 static void leSerialTask(void *pvParameters) {
-	char cStr[128];
+	static char cStr[128];
 	size_t cStrLen = sizeof(cStr) / sizeof(char);
 	while (1) {
-		serial.gets(cStr, cStrLen);
-		logMessage(cStr);
+		//serial1.gets(cStr, cStrLen);
+		//logMessage(cStr);
 	}
 	//Recomendação, se conseguir quebrar o loop, deleta a tarefa
 	vTaskDelete(NULL);
@@ -129,7 +134,7 @@ int main(void) {
 	led2.init();
 	step1.init();
 	//Inicializa serial
-	serial.init(115200);
+	serial1.init(115200);
 	//Inicializa o botao
 	botao.init();
 	//Cria as Tarefas

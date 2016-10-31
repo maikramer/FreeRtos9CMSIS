@@ -1,6 +1,6 @@
 //=================================================================================//
 //	Arquivo : Timer.cpp
-//	Projeto : IntTeste
+//	Projeto : FreeRtos9CMSIS
 //	Autor : Maikeu Locatelli
 //	Copyright : Locatelli Engenharia
 //
