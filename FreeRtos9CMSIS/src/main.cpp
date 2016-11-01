@@ -82,6 +82,7 @@ static void LEDBlinkTask(void *pvParameters) {
 		// Delay 1 segundo e então alterna estado
 		vTaskDelay(1000 / portTICK_RATE_MS);
 		led.toggle();
+		wifi.sendTelnet("Ola de LEDBLink\n");
 	}
 	//Recomendação, se conseguir quebrar o loop, deleta a tarefa
 	vTaskDelete(NULL);
@@ -93,7 +94,7 @@ static void escreveSerialTask(void *pvParameters) {
 	wifi.startTelnet();
 	while (1) {
 		vTaskDelay(2000 / portTICK_RATE_MS);
-		wifi.sendTelnet("Ola Telnet\n");
+		wifi.sendTelnet("Ola de escreveSerial\n");
 		//serial.print("AT\r\n");
 	}
 	//Recomendação, se conseguir quebrar o loop, deleta a tarefa
@@ -102,10 +103,9 @@ static void escreveSerialTask(void *pvParameters) {
 
 static void leSerialTask(void *pvParameters) {
 	static char cStr[128];
-	size_t cStrLen = sizeof(cStr) / sizeof(char);
 	while (1) {
-		//serial1.gets(cStr, cStrLen);
-		//logMessage(cStr);
+		vTaskDelay(3000 / portTICK_RATE_MS);
+		wifi.sendTelnet("Ola de leSerial\n");
 	}
 	//Recomendação, se conseguir quebrar o loop, deleta a tarefa
 	vTaskDelete(NULL);

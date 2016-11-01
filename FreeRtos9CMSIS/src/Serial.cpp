@@ -46,7 +46,7 @@ static QueueHandle_t xRxedChars[serNUM_COM_PORTS] = { 0 };
 
 // Cria o objeto Serial especificando a porta utilizada
 // Valores possíveis : USART1 e USART2
-Serial::Serial(USART_TypeDef * xPort) {
+Serial::Serial(USART_TypeDef * xPort) : _init(pdFALSE) {
 	if (xPort == USART1) {
 		_ulPort = 0;
 	} else if (xPort == USART2) {
@@ -67,6 +67,10 @@ BaseType_t Serial::init(unsigned long ulWantedBaud) {
 	USART_InitTypeDef USART_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStructure;
+
+	if (_init == pdTRUE) {
+		return (pdPASS);
+	}
 
 	if (_ulPort < serNUM_COM_PORTS) {
 		/* The common (not port dependent) part of the initialisation. */
@@ -150,6 +154,7 @@ BaseType_t Serial::init(unsigned long ulWantedBaud) {
 			USART_Cmd( USART2, ENABLE);
 
 			/* Everything is ok. */
+			_init = pdTRUE;
 			xReturn = pdPASS;
 		} else {
 			/* Nothing to do unless more than two ports are supported. */
@@ -189,7 +194,7 @@ BaseType_t Serial::print(const char * str) {
 }
 
 BaseType_t Serial::printf(const char *format, ...) {
-	char buffer[128];
+	static char buffer[128];
 	va_list args;
 	va_start(args, format);
 	vsnprintf(buffer, 128, format, args);
@@ -199,15 +204,18 @@ BaseType_t Serial::printf(const char *format, ...) {
 
 BaseType_t Serial::gets(char * pcStr, const size_t maxLen) {
 	BaseType_t xReturn = pdFAIL;
-	unsigned long ulCount = 0;
+	unsigned long ulCount = 1;
 	if (this->getChar(pcStr, portMAX_DELAY) == pdFAIL) {
 		return xReturn;
 	}
 	for (;;) {
 		pcStr++;
-		if ((++ulCount) == (maxLen - 1)) {
+		ulCount++;
+		if (ulCount == maxLen) {
+			while (this->getChar(pcStr, 5 / portTICK_RATE_MS))
+					;
 			*pcStr = '\0';
-			xReturn = pdFAIL;
+			return (pdFAIL);
 		}
 		if (this->getChar(pcStr, 5 / portTICK_RATE_MS)) {
 			continue;

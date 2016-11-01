@@ -81,6 +81,7 @@ public:
 	BaseType_t getChar(char *pcRxedChar, TickType_t xBlockTime);
 	BaseType_t putChar(unsigned char cOutChar, TickType_t xBlockTime);
 private:
+	BaseType_t _init;
 	unsigned long _ulPort;
 };
 

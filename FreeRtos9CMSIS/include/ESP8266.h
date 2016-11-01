@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -33,9 +34,10 @@
 //	Includes FreeRTOS
 //==================================================================================//
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+#include <FreeRTOS.h>
+#include <task.h>
+#include <queue.h>
+#include <semphr.h>
 
 //==================================================================================//
 //	Includes Locais
@@ -44,6 +46,12 @@
 #include <debug.h>
 #include <Serial.h>
 
+enum class WifiStatus {
+	CONNECTED,
+	GOTIP,
+	DISCONNECTED,
+	FAIL
+};
 
 #ifndef ESP8266_H_
 #define ESP8266_H_
@@ -55,14 +63,18 @@ public:
 	ESP8266(Serial& serial);
 	virtual ~ESP8266();
 	BaseType_t begin(void);
-	BaseType_t isConnected();
+	WifiStatus connStatus(void);
 	BaseType_t connect();
 	BaseType_t cmd(const char * command, const char *logMsg, unsigned char retries);
 	BaseType_t startTelnet(void);
 	BaseType_t sendTelnet(const char * pcStr);
+	BaseType_t sendfTelnet(const char *format, ...);
 private:
 	Serial& _serial;
 	char _cRxBuffer[MAX_ESP_BUFFER];
+	BaseType_t _init;
+	BaseType_t telnetEnabled;
+	 SemaphoreHandle_t xMutex;
 };
 
 #endif /* ESP8266_H_ */
